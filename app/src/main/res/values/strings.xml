@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SIT Campus Tour</string>
+    <string name="profile">Profile</string>
+    <string name="setting">Setting</string>
+
+    <string name="openNavDrawer">Navigation Drawer open</string>
+    <string name="closeNavDrawer">Navigation Drawer close</string>
+    <string name="navigation">Navigation</string>
+
+</resources>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "784505075521",
+    "firebase_url": "https://mhci-b8217.firebaseio.com",
+    "project_id": "mhci-b8217",
+    "storage_bucket": "mhci-b8217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784505075521:android:46c0fe62a78d34b5be53c0",
+        "android_client_info": {
+          "package_name": "com.example.mhci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784505075521-kfh68j588kuoe4uvni89kdsgsqme2a8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mhci",
+            "certificate_hash": "b0ab75f558d1d5fd9f02821bfd33055b9ff5af3f"
+          }
+        },
+        {
+          "client_id": "784505075521-2s38fufca59j7qhtt2e9pnhcdhndqki4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0X0_hmrEB-k8ofxQSJ3szA2yaLy2398o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784505075521-2s38fufca59j7qhtt2e9pnhcdhndqki4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
