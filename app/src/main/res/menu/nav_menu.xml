@@ -8,6 +8,10 @@
                 android:icon="@drawable/ic_profile"
                 android:title="@string/profile" />
             <item
+                android:id="@+id/nav_ranking"
+                android:icon="@drawable/ic_ranking"
+                android:title="@string/ranking" />
+            <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_settings"
                 android:title="@string/setting" />

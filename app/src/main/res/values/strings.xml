@@ -6,5 +6,6 @@
     <string name="openNavDrawer">Navigation Drawer open</string>
     <string name="closeNavDrawer">Navigation Drawer close</string>
     <string name="navigation">Navigation</string>
+    <string name="ranking">Ranking</string>
 
 </resources>

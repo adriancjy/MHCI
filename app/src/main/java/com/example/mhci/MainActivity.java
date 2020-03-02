@@ -4,8 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,43 +28,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.mhci.User;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    String guidNo = "2427239T";
-    int scorePts = 124;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DrawerLocker {
 
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBar;
+
+    private static final int PERMISSION_REQUEST_CODE = 200;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        User user1 = new User(guidNo, scorePts);
-        // Write a message to the database
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myRef = database.child("/testProfile/" + guidNo);
 
-        myRef.setValue(user1);
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                User u2 = new User();
-                u2 = dataSnapshot.getValue(User.class);
-                Log.d("Value", "Value is: " + u2.getPoints());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Failure", "Failed to read value.", error.toException());
-            }
-        });
 
 
         toolbar = findViewById(R.id.main_toolbar);
@@ -64,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-        ActionBarDrawerToggle actionBar = new ActionBarDrawerToggle(
+        actionBar = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
                 toolbar,
@@ -76,7 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBar.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new ProfileFragment()).commit();
+                new WelcomeFragment()).commit();
+
+        if (!checkPermission()) {
+            requestPermission();
+        }
     }
 
 
@@ -86,12 +78,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 if (!menuItem.isChecked()) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new ProfileFragment()).commit();
+                            new QRScan()).commit();
                     drawerLayout.closeDrawers();
                     break;
                 } else {
                     break;
                 }
+            case R.id.nav_ranking:
+                if (!menuItem.isChecked()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new RankingFragment()).commit();
+                    drawerLayout.closeDrawers();
+                    break;
+                } else {
+                    break;
+                }
+//            case R.id.nav_setting:
+//                if (!menuItem.isChecked()) {
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                            new RankingFragment()).commit();
+//                    drawerLayout.closeDrawers();
+//                    break;
+//                } else {
+//                    break;
+//                }
         }
         return true;
     }
@@ -99,5 +109,84 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        SharedPreferences sp = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sp.edit();
+        edit.clear();
+        edit.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sp = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sp.edit();
+        edit.clear();
+        edit.commit();
+    }
+
+    public void setDrawerEnabled(boolean enabled) {
+        int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED :
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
+        drawerLayout.setDrawerLockMode(lockMode);
+        actionBar.setDrawerIndicatorEnabled(enabled);
+    }
+
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+
+                    // main logic
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            showMessageOKCancel("You need to allow access permissions",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermission();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 }
