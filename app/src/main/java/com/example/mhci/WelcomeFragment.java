@@ -46,17 +46,21 @@ public class WelcomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 guidNo = guidText.getText().toString();
-                final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                final DatabaseReference myRef = database.child("/guidProfile/" + guidNo);
+                final DatabaseReference database = FirebaseDatabase.getInstance().getReference("guidProfile");
+
+
                 newUser = new User(guidNo, 0);
-                myRef.setValue(newUser);
-                myRef.addValueEventListener(new ValueEventListener() {
+                database.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and again
-                        // whenever data at this location is updated.
-                        newUser = dataSnapshot.getValue(User.class);
-                        guidPoints = newUser.getPoints();
+                            if (dataSnapshot.hasChild(guidNo)) {
+                                newUser = dataSnapshot.child(guidNo).getValue(User.class);
+                                guidPoints = newUser.getPoints();
+                            } else {
+                                //setvalue replaces the value so need to check!
+                                database.child(guidNo).setValue(newUser);
+
+                        }
                     }
 
                     @Override

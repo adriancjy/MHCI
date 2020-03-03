@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
+    public boolean globalStatus = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

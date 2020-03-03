@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -25,6 +27,7 @@ public class QRScan extends Fragment implements ZXingScannerView.ResultHandler {
 
     User u2 = new User();
     private ZXingScannerView ScannerView;
+    Bundle args = new Bundle();
 
 
 
@@ -56,13 +59,6 @@ public class QRScan extends Fragment implements ZXingScannerView.ResultHandler {
         return v;
     }
 
-    public void setPrefVal(){
-        SharedPreferences sp = this.getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putString("guid", u2.getGuid());
-        edit.putInt("points", u2.getPoints());
-        edit.commit();
-    }
 
     public void getPrefVal(){
         SharedPreferences sp = this.getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
@@ -72,8 +68,17 @@ public class QRScan extends Fragment implements ZXingScannerView.ResultHandler {
 
     @Override
     public void handleResult(Result result) {
-        String value = result.getText();
         //Add in intent to pass value to a new page, then check the value and retrieve from firebase
+        MainActivity ma = (MainActivity)getActivity();
+        ma.globalStatus = true;
+        String value = result.getText();
+        args.putString("key", value);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        QuestionFragment fragment = new QuestionFragment();
+        fragment.setArguments(args);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
         //Also add in a button at the welcome page to allow for user to view ranking. Use intent to check if its access via pressing the button or just view rnaking to hide or show the drawer.
     }
 

@@ -7,5 +7,11 @@
     <string name="closeNavDrawer">Navigation Drawer close</string>
     <string name="navigation">Navigation</string>
     <string name="ranking">Ranking</string>
+    <string name="guidType">Type in your GUID</string>
+    <string name="keyinGUID">Please key in your GUID</string>
+    <string name="sit_campus_tour">SIT Campus Tour</string>
+    <string name="guid_points">Position: Guid, Points</string>
+    <string name="trivia_text">Scan the QR code located at the first floor of the building. It will lead you to the trivia</string>
+    <string name="welcome_to_the_trivia_for">Welcome to the trivia for</string>
 
 </resources>

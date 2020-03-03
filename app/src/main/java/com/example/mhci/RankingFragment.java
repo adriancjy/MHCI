@@ -48,6 +48,8 @@ public class RankingFragment extends Fragment {
 
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arrayList);
         listView = (ListView) v.findViewById(R.id.rankinglistView);
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.listview_header,listView,false);
+        listView.addHeaderView(header);
         listView.setAdapter(adapter);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -63,7 +65,7 @@ public class RankingFragment extends Fragment {
                 }
                 RankingPointsSorter rps = new RankingPointsSorter(userList);
                 for(int i = 0; i < rps.getSortedJobCandidateByAge().size(); i++){
-                    arrayList.add(i+1 + rps.getSortedJobCandidateByAge().get(i).toString());
+                    arrayList.add(i+1 + ": " + rps.getSortedJobCandidateByAge().get(i).toString());
                 }
                 adapter.notifyDataSetChanged();
 

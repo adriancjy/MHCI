@@ -42,7 +42,7 @@ public class User implements Comparable<User> {
     }
 
     public String toString(){
-            return "       |         " + this.guid + "       |         " + this.points;
+            return  this.guid + ", " + this.points;
 
     }
 
