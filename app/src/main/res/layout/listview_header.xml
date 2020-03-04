@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/guid_points"
-        android:background="#ffe238"
+        android:background="@android:color/holo_red_dark"
         android:padding="10dp"
         />
 

@@ -42,7 +42,7 @@ public class RankingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_ranking, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("guidProfile");
+        mDatabase = FirebaseDatabase.getInstance().getReference(getString(R.string.guidPath));
 
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
 
@@ -52,7 +52,7 @@ public class RankingFragment extends Fragment {
         listView.addHeaderView(header);
         listView.setAdapter(adapter);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {

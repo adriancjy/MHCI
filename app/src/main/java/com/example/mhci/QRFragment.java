@@ -23,7 +23,7 @@ import org.w3c.dom.Text;
 import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class QRScan extends Fragment implements ZXingScannerView.ResultHandler {
+public class QRFragment extends Fragment implements ZXingScannerView.ResultHandler {
 
     User u2 = new User();
     private ZXingScannerView ScannerView;
@@ -73,11 +73,12 @@ public class QRScan extends Fragment implements ZXingScannerView.ResultHandler {
         ma.globalStatus = true;
         String value = result.getText();
         args.putString("key", value);
+        args.putString("guid", u2.getGuid());
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         QuestionFragment fragment = new QuestionFragment();
         fragment.setArguments(args);
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack("QRFragment");
         fragmentTransaction.commit();
         //Also add in a button at the welcome page to allow for user to view ranking. Use intent to check if its access via pressing the button or just view rnaking to hide or show the drawer.
     }

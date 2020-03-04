@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 if (!menuItem.isChecked()) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new QRScan()).commit();
+                            new QRFragment()).addToBackStack("HomeFragment").commit();
                     drawerLayout.closeDrawers();
                     break;
                 } else {
@@ -89,12 +89,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_ranking:
                 if (!menuItem.isChecked()) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            new RankingFragment()).commit();
+                            new RankingFragment()).addToBackStack("HomeFragment").commit();
                     drawerLayout.closeDrawers();
                     break;
                 } else {
                     break;
                 }
+
+            case R.id.nav_home:
+                if (!menuItem.isChecked()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new HomeFragment()).addToBackStack("HomeFragment").commit();
+                    drawerLayout.closeDrawers();
+                    break;
+                } else {
+                    break;
+                }
+
 //            case R.id.nav_setting:
 //                if (!menuItem.isChecked()) {
 //                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -190,5 +201,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -46,7 +46,7 @@ public class WelcomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 guidNo = guidText.getText().toString();
-                final DatabaseReference database = FirebaseDatabase.getInstance().getReference("guidProfile");
+                final DatabaseReference database = FirebaseDatabase.getInstance().getReference(getString(R.string.guidPath));
 
 
                 newUser = new User(guidNo, 0);
@@ -72,8 +72,8 @@ public class WelcomeFragment extends Fragment {
                 setPrefVal();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                QRScan fragment = new QRScan();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                HomeFragment fragment = new HomeFragment();
+                fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack("WelcomeFragment");
                 fragmentTransaction.commit();
             }
         });

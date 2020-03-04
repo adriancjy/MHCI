@@ -4,6 +4,16 @@ public class QuestionBank {
     public String question1;
     public String question2;
 
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String schoolName;
+
     public String getQuestion1() {
         return question1;
     }

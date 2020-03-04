@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SIT Campus Tour</string>
-    <string name="profile">Profile</string>
+    <string name="profile">Scan QR Code</string>
     <string name="setting">Setting</string>
 
     <string name="openNavDrawer">Navigation Drawer open</string>
@@ -13,5 +13,13 @@
     <string name="guid_points">Position: Guid, Points</string>
     <string name="trivia_text">Scan the QR code located at the first floor of the building. It will lead you to the trivia</string>
     <string name="welcome_to_the_trivia_for">Welcome to the trivia for</string>
+    <string name="quiz_header">This is the quiz for</string>
+    <string name="congrats">Congratulations! You have earned</string>
+    <string name="view_rankings">Click here to view rankings!</string>
+    <string name="guidPath">guidProfile</string>
+    <string name="questionPath">questionBank</string>
+    <string name="triviaPath">trivia</string>
+    <string name="home">Home</string>
+    <string name="intro">Welcome to the SIT Campus Tour App. Look out for QR codes in the first level of each building, scan them and partake in the quiz against your friends! The top three students will stand a chance to win attractive prizes!</string>
 
 </resources>
