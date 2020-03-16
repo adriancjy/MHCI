@@ -18,6 +18,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -45,6 +48,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        Button btnLogout = (Button) headerView.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogExample de = new DialogExample();
+                de.show(getSupportFragmentManager(), "Exit dialog");
+            }
+        });
 
 
 
@@ -106,15 +120,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 }
 
-//            case R.id.nav_setting:
-//                if (!menuItem.isChecked()) {
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                            new RankingFragment()).commit();
-//                    drawerLayout.closeDrawers();
-//                    break;
-//                } else {
-//                    break;
-//                }
+            case R.id.nav_map:
+                if (!menuItem.isChecked()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new MapFragment()).addToBackStack("MapFragment").commit();
+                    drawerLayout.closeDrawers();
+                    break;
+                } else {
+                    break;
+                }
         }
         return true;
     }
@@ -140,6 +154,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences.Editor edit = sp.edit();
         edit.clear();
         edit.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sp = this.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sp.edit();
+        edit.clear().apply();
     }
 
     public void setDrawerEnabled(boolean enabled) {

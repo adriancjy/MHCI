@@ -73,7 +73,7 @@ public class WelcomeFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 HomeFragment fragment = new HomeFragment();
-                fragmentTransaction.replace(R.id.fragment_container, fragment).addToBackStack("WelcomeFragment");
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
                 fragmentTransaction.commit();
             }
         });

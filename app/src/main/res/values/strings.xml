@@ -21,5 +21,12 @@
     <string name="triviaPath">trivia</string>
     <string name="home">Home</string>
     <string name="intro">Welcome to the SIT Campus Tour App. Look out for QR codes in the first level of each building, scan them and partake in the quiz against your friends! The top three students will stand a chance to win attractive prizes!</string>
+    <string name="locate_where_you_are">Locate where you are!</string>
+    <string name="novalue">No</string>
+    <string name="yesvalue">Yes</string>
+    <string name="dialog_message">Are you sure you want to exit and go to the main page?</string>
+    <string name="title_value">Prompt</string>
+    <string name="service">NFC Service</string>
+    <string name="aiddescription">Description</string>
 
 </resources>

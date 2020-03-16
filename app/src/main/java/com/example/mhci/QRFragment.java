@@ -41,12 +41,6 @@ public class QRFragment extends Fragment implements ZXingScannerView.ResultHandl
         //Set drawer locker to appear/hidden
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
 
-        //Get the header out.
-
-        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView tvGUID = (TextView) headerView.findViewById(R.id.tvGUID);
-        tvGUID.setText(u2.getGuid());
 
         //ZXING Scanner
         ScannerView = new ZXingScannerView(getActivity());

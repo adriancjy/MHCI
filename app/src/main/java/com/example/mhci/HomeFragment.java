@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +30,11 @@ public class HomeFragment extends Fragment {
         getPrefVal();
         //Set drawer locker to appear/hidden
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
+
+        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView tvGUID = (TextView) headerView.findViewById(R.id.tvGUID);
+        tvGUID.setText(u.getGuid());
 
         viewRanking = (Button) v.findViewById(R.id.btnRanking);
         startQuiz = (Button) v.findViewById(R.id.btnStartQuiz);
@@ -57,6 +65,7 @@ public class HomeFragment extends Fragment {
 
     public void getPrefVal(){
         SharedPreferences sp = this.getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        String key = sp.getString("key", "");
         u.setGuid(sp.getString("guid", ""));
         u.setPoints(sp.getInt("points", 0));
     }
