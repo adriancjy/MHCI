@@ -1,7 +1,9 @@
 package com.example.mhci;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,17 +27,32 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class WelcomeFragment extends Fragment {
+public class WelcomeFragment extends Fragment implements OutcomingNfcManager.NfcActivity {
 
     String guidNo;
     int guidPoints;
     User newUser;
+    String text = "Testing tag";
+
+    private Button btnSetOutcomingMessage;
+
+    private NfcAdapter nfcAdapter;
+    private OutcomingNfcManager outcomingNfccallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_welcome, container, false);
+        if (!isNfcSupported()) {
+            Toast.makeText(getActivity(), "Nfc is not supported on this device", Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        }
+        if (!nfcAdapter.isEnabled()) {
+            Toast.makeText(getActivity(), "NFC disabled on this device. Turn on to proceed", Toast.LENGTH_SHORT).show();
+        }
+
+
 
         final EditText guidText = v.findViewById(R.id.guidText);
 
@@ -46,6 +64,7 @@ public class WelcomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 guidNo = guidText.getText().toString();
+                setOutGoingMessage();
                 final DatabaseReference database = FirebaseDatabase.getInstance().getReference(getString(R.string.guidPath));
 
 
@@ -78,7 +97,9 @@ public class WelcomeFragment extends Fragment {
             }
         });
 
-
+        this.outcomingNfccallback = new OutcomingNfcManager(this);
+        this.nfcAdapter.setOnNdefPushCompleteCallback(outcomingNfccallback, getActivity());
+        this.nfcAdapter.setNdefPushMessageCallback(outcomingNfccallback, getActivity());
 
 
         return v;
@@ -96,6 +117,38 @@ public class WelcomeFragment extends Fragment {
         SharedPreferences sp = this.getActivity().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         newUser.setGuid(sp.getString("guid", ""));
         newUser.setPoints(sp.getInt("points", 0));
+    }
+
+
+
+
+
+    protected void onNewIntent(Intent intent) {
+        getActivity().setIntent(intent);
+    }
+
+    private boolean isNfcSupported() {
+        this.nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+        return this.nfcAdapter != null;
+    }
+
+    private void setOutGoingMessage() {
+        String outMessage = guidNo;
+//        this.tvOutcomingMessage.setText(outMessage);
+    }
+
+    @Override
+    public String getOutcomingMessage() {
+        return guidNo;
+    }
+
+    @Override
+    public void signalResult() {
+        // this will be triggered when NFC message is sent to a device.
+        // should be triggered on UI thread. We specify it explicitly
+        // cause onNdefPushComplete is called from the Binder thread
+//        runOnUiThread(() ->
+//                Toast.makeText(getActivity(), R.string.message_beaming_complete, Toast.LENGTH_SHORT).show());
     }
 
 
