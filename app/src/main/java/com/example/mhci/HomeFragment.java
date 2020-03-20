@@ -3,6 +3,7 @@ package com.example.mhci;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
 
     Button viewRanking, startQuiz;
+    String name;
     User u = new User();
+    User newU = new User();
+
 
     @Nullable
     @Override
@@ -28,13 +37,32 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         getPrefVal();
+        final DatabaseReference database = FirebaseDatabase.getInstance("https://mhci-b8217.firebaseio.com").getReference(getString(R.string.guidPath));
+
+
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(u.getGuid())) {
+                    newU = dataSnapshot.child(u.getGuid()).getValue(User.class);
+                    name = newU.getName();
+                    NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                    View headerView = navigationView.getHeaderView(0);
+                    TextView tvGUID = (TextView) headerView.findViewById(R.id.tvGUID);
+                    tvGUID.setText(name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Failure", "Failed to read value.", error.toException());
+            }
+        });
         //Set drawer locker to appear/hidden
         ((DrawerLocker) getActivity()).setDrawerEnabled(true);
 
-        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        TextView tvGUID = (TextView) headerView.findViewById(R.id.tvGUID);
-        tvGUID.setText(u.getGuid());
+
 
         viewRanking = (Button) v.findViewById(R.id.btnRanking);
         startQuiz = (Button) v.findViewById(R.id.btnStartQuiz);

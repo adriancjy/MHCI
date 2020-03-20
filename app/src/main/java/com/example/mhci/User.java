@@ -10,13 +10,51 @@ public class User implements Comparable<User> {
     String guid;
     int points;
 
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
+    String information;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    String name;
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    String course;
+
     public User(){
 
     }
-
     public User(String guid, int points){
         this.guid = guid;
         this.points = points;
+
+    }
+
+    public User(String guid, int points, String name, String course, String information){
+        this.guid = guid;
+        this.points = points;
+        this.name = name;
+        this.course = course;
+        this.information = information;
     }
 
     public String getGuid() {
@@ -42,7 +80,7 @@ public class User implements Comparable<User> {
     }
 
     public String toString(){
-            return  this.guid + ", " + this.points;
+            return  this.guid + ", " + this.name + ", " + this.points;
 
     }
 
